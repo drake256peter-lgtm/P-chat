@@ -1,0 +1,6 @@
+{
+  "name": "P-CHAT",
+  "description": "P-CHAT: Chat, Connect, Explore — Social networking app with real-time chat, moments, Snapchat-style camera filters, calls, and MALAK AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,493 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public social profile for P-CHAT discovery and chat headers without PII.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the user." },
+        "username": { "type": "string", "description": "Unique handle for P-CHAT discovery." },
+        "displayName": { "type": "string", "description": "Display name shown in chats and moments." },
+        "bio": { "type": "string", "description": "Short user bio." },
+        "statusText": { "type": "string", "description": "Current mood or status line." },
+        "country": { "type": "string", "description": "User country or region." },
+        "countryFlag": { "type": "string", "description": "Flag emoji for user's country." },
+        "languages": { "type": "string", "description": "Spoken languages comma-separated." },
+        "fullName": { "type": "string", "description": "Full display name entered during registration." },
+        "preferredLanguage": { "type": "string", "description": "Primary preferred UI/chat language." },
+        "verified": { "type": "boolean", "description": "Whether the profile displays a verified badge." },
+        "avatarColorHex": { "type": "string", "description": "Accent color hex for user avatar ring." },
+        "photoBase64": { "type": "string", "description": "Compressed profile picture thumbnail." },
+        "authProvider": { "type": "string", "enum": ["google", "phone", "email_link"] },
+        "profileCompleted": { "type": "boolean", "description": "Whether onboarding registration fields are complete." },
+        "isOnline": { "type": "boolean", "description": "Whether the user is currently active." },
+        "isLive": { "type": "boolean", "description": "Whether the user is currently LIVE." },
+        "isDiscoverable": { "type": "boolean", "description": "Privacy toggle controlling Connect discovery visibility." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on profile creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on last profile update." }
+      },
+      "required": ["userId", "username", "displayName", "isOnline", "isLive", "isDiscoverable", "createdAt", "updatedAt"]
+    },
+    "PrivateAccountSettings": {
+      "title": "PrivateAccountSettings",
+      "description": "Owner-only PII and privacy/notification settings.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "country": { "type": "string" },
+        "countryFlag": { "type": "string" },
+        "preferredLanguage": { "type": "string" },
+        "dateOfBirth": { "type": "string" },
+        "authProvider": { "type": "string", "enum": ["google", "phone", "email_link"] },
+        "emailVerified": { "type": "boolean" },
+        "phoneVerified": { "type": "boolean" },
+        "profileCompleted": { "type": "boolean" },
+        "showOnlineStatus": { "type": "boolean" },
+        "readReceiptsEnabled": { "type": "boolean" },
+        "allowCallsFrom": { "type": "string", "enum": ["everyone", "friends", "nobody"] },
+        "notifyMessages": { "type": "boolean" },
+        "notifyCalls": { "type": "boolean" },
+        "themeMode": { "type": "string", "enum": ["black", "white"] },
+        "activeCameraFilterId": { "type": "string" },
+        "discoverLanguage": { "type": "string" },
+        "discoverCountry": { "type": "string" },
+        "discoverOnlineOnly": { "type": "boolean" },
+        "discoverVerifiedOnly": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "showOnlineStatus", "readReceiptsEnabled", "allowCallsFrom", "notifyMessages", "notifyCalls", "createdAt", "updatedAt"]
+    },
+    "WalletSummary": {
+      "title": "WalletSummary",
+      "description": "Owner-only P-CHAT Wallet balance in USD cents, local currency minor units, and P-Coins.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "balanceCents": { "type": "integer" },
+        "coins": { "type": "integer" },
+        "currency": { "type": "string", "enum": ["USD"] },
+        "localCurrency": { "type": "string" },
+        "localBalanceMinor": { "type": "integer" },
+        "localCountry": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "balanceCents", "coins", "currency", "createdAt", "updatedAt"]
+    },
+    "WalletTransaction": {
+      "title": "WalletTransaction",
+      "description": "Owner-only immutable ledger entry and verified receipt for wallet activity.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "txType": { "type": "string", "enum": ["deposit", "withdraw", "transfer_out", "transfer_in", "convert", "gift"] },
+        "amountCents": { "type": "integer" },
+        "coinDelta": { "type": "integer" },
+        "title": { "type": "string" },
+        "counterpartyId": { "type": "string" },
+        "counterpartyName": { "type": "string" },
+        "note": { "type": "string" },
+        "baseAmountCents": { "type": "integer" },
+        "feeCents": { "type": "integer" },
+        "currency": { "type": "string" },
+        "localCurrency": { "type": "string" },
+        "localAmountMinor": { "type": "integer" },
+        "exchangeRate": { "type": "number" },
+        "recipientCountry": { "type": "string" },
+        "paymentProvider": { "type": "string" },
+        "settlementRef": { "type": "string" },
+        "receiptId": { "type": "string" },
+        "settlementVerified": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["completed", "pending"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "txType", "amountCents", "coinDelta", "title", "status", "createdAt", "updatedAt"]
+    },
+    "WalletTransfer": {
+      "title": "WalletTransfer",
+      "description": "Peer-to-peer international wallet transfer or gift claim ticket with FX, fees, provider settlement, and receipt ID.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "participantUids": { "type": "array" },
+        "amountCents": { "type": "integer" },
+        "coins": { "type": "integer" },
+        "note": { "type": "string" },
+        "senderCurrency": { "type": "string" },
+        "recipientCountry": { "type": "string" },
+        "recipientCurrency": { "type": "string" },
+        "exchangeRate": { "type": "number" },
+        "recipientLocalAmountMinor": { "type": "integer" },
+        "feeCents": { "type": "integer" },
+        "totalDebitedCents": { "type": "integer" },
+        "paymentProvider": { "type": "string" },
+        "settlementRef": { "type": "string" },
+        "receiptId": { "type": "string" },
+        "settlementVerified": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["sent", "claimed"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "senderName", "recipientId", "recipientName", "participantUids", "amountCents", "coins", "status", "createdAt", "updatedAt"]
+    },
+    "Friendship": {
+      "title": "Friendship",
+      "description": "Friend request and connection relationship between two users.",
+      "type": "object",
+      "properties": {
+        "userIds": { "type": "array", "description": "Sorted pair of the two user UIDs." },
+        "requesterId": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "requesterName": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userIds", "requesterId", "recipientId", "requesterName", "recipientName", "status", "createdAt", "updatedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Direct or group chat thread.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "isGroup": { "type": "boolean" },
+        "memberUids": { "type": "array" },
+        "memberNames": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "lastMessageText": { "type": "string" },
+        "lastMessageSenderId": { "type": "string" },
+        "lastMessageType": { "type": "string", "enum": ["text", "voice", "image", "video", "file", "call", "gift"] },
+        "pinnedByUids": { "type": "array" },
+        "unreadByUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "isGroup", "memberUids", "createdBy", "lastMessageText", "lastMessageType", "pinnedByUids", "unreadByUids", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Individual message inside a conversation.",
+      "type": "object",
+      "properties": {
+        "conversationId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "messageType": { "type": "string", "enum": ["text", "voice", "image", "video", "file", "call", "gift"] },
+        "mediaMeta": { "type": "string" },
+        "imageBase64": { "type": "string" },
+        "reactions": { "type": "array" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["conversationId", "senderId", "senderName", "text", "messageType", "reactions", "memberUids", "createdAt", "updatedAt"]
+    },
+    "Moment": {
+      "title": "Moment",
+      "description": "User story, status update, photo, or video moment.",
+      "type": "object",
+      "properties": {
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorUsername": { "type": "string" },
+        "caption": { "type": "string" },
+        "mediaType": { "type": "string", "enum": ["status", "photo", "video", "ai_art"] },
+        "filterTag": { "type": "string" },
+        "imageBase64": { "type": "string" },
+        "isStory": { "type": "boolean" },
+        "visibility": { "type": "string", "enum": ["public", "private"] },
+        "likedByUids": { "type": "array" },
+        "commentCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "caption", "mediaType", "isStory", "visibility", "likedByUids", "commentCount", "createdAt", "updatedAt"]
+    },
+    "MomentComment": {
+      "title": "MomentComment",
+      "description": "Comment on a Moment.",
+      "type": "object",
+      "properties": {
+        "momentId": { "type": "string" },
+        "momentAuthorId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "text": { "type": "string" },
+        "visibility": { "type": "string", "enum": ["public", "private"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["momentId", "momentAuthorId", "authorId", "authorName", "text", "visibility", "createdAt", "updatedAt"]
+    },
+    "CallSession": {
+      "title": "CallSession",
+      "description": "Voice, HD video, or group call notification and state.",
+      "type": "object",
+      "properties": {
+        "conversationId": { "type": "string" },
+        "callerId": { "type": "string" },
+        "callerName": { "type": "string" },
+        "title": { "type": "string" },
+        "participantUids": { "type": "array" },
+        "callType": { "type": "string", "enum": ["voice", "video", "group_voice", "group_video"] },
+        "status": { "type": "string", "enum": ["ringing", "active", "ended", "declined"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["conversationId", "callerId", "callerName", "title", "participantUids", "callType", "status", "createdAt", "updatedAt"]
+    },
+    "MalakMessage": {
+      "title": "MalakMessage",
+      "description": "Persisted personal AI assistant chat message.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "text": { "type": "string" },
+        "mode": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "role", "text", "mode", "createdAt", "updatedAt"]
+    },
+    "FilterPreset": {
+      "title": "FilterPreset",
+      "description": "User-saved theme and discovery/camera filter preset.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "themeMode": { "type": "string", "enum": ["black", "white"] },
+        "languageFilter": { "type": "string" },
+        "countryFilter": { "type": "string" },
+        "onlineOnly": { "type": "boolean" },
+        "verifiedOnly": { "type": "boolean" },
+        "cameraFilterId": { "type": "string" },
+        "sortBy": { "type": "string", "enum": ["recommended", "online_first", "verified_first", "alphabetical"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "themeMode", "onlineOnly", "verifiedOnly", "sortBy", "createdAt", "updatedAt"]
+    },
+    "ServerFilterItem": {
+      "title": "ServerFilterItem",
+      "description": "Server-managed catalog item for camera, call, and discovery filters.",
+      "type": "object",
+      "properties": {
+        "filterId": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["ar_lens", "color_grade", "discovery"] },
+        "badge": { "type": "string" },
+        "description": { "type": "string" },
+        "usageCount": { "type": "integer" },
+        "sortOrder": { "type": "integer" },
+        "isEnabled": { "type": "boolean" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["filterId", "name", "category", "badge", "description", "usageCount", "sortOrder", "isEnabled", "createdBy", "createdAt", "updatedAt"]
+    },
+    "UsernameClaim": {
+      "title": "UsernameClaim",
+      "description": "Atomic unique @username reservation index.",
+      "type": "object",
+      "properties": {
+        "username": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["username", "userId", "createdAt", "updatedAt"]
+    },
+    "UserSettingsDoc": {
+      "title": "UserSettingsDoc",
+      "description": "Owner-only synchronized user preferences, auth method, and verification state.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "preferredLanguage": { "type": "string" },
+        "country": { "type": "string" },
+        "countryFlag": { "type": "string" },
+        "themeMode": { "type": "string", "enum": ["black", "white"] },
+        "activeCameraFilterId": { "type": "string" },
+        "lastAuthMethod": { "type": "string", "enum": ["google", "phone", "email_link"] },
+        "emailVerified": { "type": "boolean" },
+        "phoneVerified": { "type": "boolean" },
+        "profileCompleted": { "type": "boolean" },
+        "accountStatus": { "type": "string", "enum": ["active", "onboarding", "restricted"] },
+        "notifyMessages": { "type": "boolean" },
+        "notifyCalls": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "preferredLanguage", "themeMode", "lastAuthMethod", "profileCompleted", "accountStatus", "createdAt", "updatedAt"]
+    },
+    "UserSessionDoc": {
+      "title": "UserSessionDoc",
+      "description": "Owner-only tracked sign-in session record for multi-device session management.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "provider": { "type": "string", "enum": ["google", "phone", "email_link"] },
+        "status": { "type": "string", "enum": ["active", "signed_out", "revoked"] },
+        "platform": { "type": "string" },
+        "appVersion": { "type": "string" },
+        "lastActiveAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sessionId", "userId", "deviceId", "provider", "status", "platform", "createdAt", "updatedAt"]
+    },
+    "LoginHistoryDoc": {
+      "title": "LoginHistoryDoc",
+      "description": "Owner-only immutable login and registration audit event.",
+      "type": "object",
+      "properties": {
+        "entryId": { "type": "string" },
+        "userId": { "type": "string" },
+        "provider": { "type": "string" },
+        "eventType": { "type": "string" },
+        "outcome": { "type": "string", "enum": ["success", "failure", "pending", "cancelled"] },
+        "statusCode": { "type": "string" },
+        "message": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "verificationStatus": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["entryId", "userId", "provider", "eventType", "outcome", "statusCode", "message", "createdAt", "updatedAt"]
+    },
+    "SecurityLogDoc": {
+      "title": "SecurityLogDoc",
+      "description": "Owner-only redacted authentication security log.",
+      "type": "object",
+      "properties": {
+        "logId": { "type": "string" },
+        "userId": { "type": "string" },
+        "category": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warn", "critical"] },
+        "provider": { "type": "string" },
+        "summary": { "type": "string" },
+        "redacted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["logId", "userId", "category", "severity", "provider", "summary", "redacted", "createdAt", "updatedAt"]
+    },
+    "DeviceRegistrationDoc": {
+      "title": "DeviceRegistrationDoc",
+      "description": "Owner-only trusted device installation registration.",
+      "type": "object",
+      "properties": {
+        "deviceDocId": { "type": "string" },
+        "userId": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "deviceModel": { "type": "string" },
+        "osVersion": { "type": "string" },
+        "appVersion": { "type": "string" },
+        "platform": { "type": "string" },
+        "isTrusted": { "type": "boolean" },
+        "lastSeenAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["deviceDocId", "userId", "deviceId", "deviceModel", "platform", "isTrusted", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Public discoverable P-CHAT profiles (no PII)."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/PrivateAccountSettings" },
+      "description": "Owner-only private account settings, theme preference, and PII."
+    },
+    "/users/{userId}/filterPresets/{presetId}": {
+      "schema": { "$ref": "#/entities/FilterPreset" },
+      "description": "Owner-only saved filter and theme presets."
+    },
+    "/users/{userId}/wallet/{docId}": {
+      "schema": { "$ref": "#/entities/WalletSummary" },
+      "description": "Owner-only P-CHAT Wallet balance and P-Coins."
+    },
+    "/users/{userId}/walletTransactions/{txId}": {
+      "schema": { "$ref": "#/entities/WalletTransaction" },
+      "description": "Owner-only immutable wallet transaction history."
+    },
+    "/users/{userId}/malakChats/{messageId}": {
+      "schema": { "$ref": "#/entities/MalakMessage" },
+      "description": "User's personal MALAK AI conversation history."
+    },
+    "/walletTransfers/{transferId}": {
+      "schema": { "$ref": "#/entities/WalletTransfer" },
+      "description": "Peer-to-peer wallet transfers and gift claims."
+    },
+    "/friendships/{friendshipId}": {
+      "schema": { "$ref": "#/entities/Friendship" },
+      "description": "Friend requests and accepted connections."
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "Direct and group conversations."
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Messages inside a conversation."
+    },
+    "/moments/{momentId}": {
+      "schema": { "$ref": "#/entities/Moment" },
+      "description": "Moments and daily stories feed."
+    },
+    "/moments/{momentId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/MomentComment" },
+      "description": "Comments on moments."
+    },
+    "/calls/{callId}": {
+      "schema": { "$ref": "#/entities/CallSession" },
+      "description": "Voice, video, and group call sessions."
+    },
+    "/serverFilters/{filterId}": {
+      "schema": { "$ref": "#/entities/ServerFilterItem" },
+      "description": "Server-synced filter API catalog for camera, video calls, and discovery."
+    },
+    "/usernames/{handle}": {
+      "schema": { "$ref": "#/entities/UsernameClaim" },
+      "description": "Unique @username reservation directory (get only, no enumeration)."
+    },
+    "/userSettings/{userId}": {
+      "schema": { "$ref": "#/entities/UserSettingsDoc" },
+      "description": "Owner-only synchronized settings, auth method, and verification state."
+    },
+    "/userSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/UserSessionDoc" },
+      "description": "Owner-only active and historical authentication sessions."
+    },
+    "/loginHistory/{entryId}": {
+      "schema": { "$ref": "#/entities/LoginHistoryDoc" },
+      "description": "Owner-only immutable login and registration audit log."
+    },
+    "/securityLogs/{logId}": {
+      "schema": { "$ref": "#/entities/SecurityLogDoc" },
+      "description": "Owner-only redacted security & auth diagnostic events."
+    },
+    "/deviceRegistrations/{deviceDocId}": {
+      "schema": { "$ref": "#/entities/DeviceRegistrationDoc" },
+      "description": "Owner-only trusted device registrations."
+    }
+  }
+}
